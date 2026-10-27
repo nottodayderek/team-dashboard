@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B0B0B">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>DEREK Leadership Dashboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: brand bands top (strapline, stacked logo), tabbed single column below, cards in 3- and 4-up grids that stack on phones.
+   Deliberately single dark look to match the Not Today Derek website and workshop suite. */
+:root{
+  --black:#0B0B0B; --panel:#161616; --panel-2:#2A2A2A; --line:#333333;
+  --grey:#9A9A9A; --white:#FFFFFF; --orange:#FF5F1F; --fluoro:#E6FF00;
+  --good:#E6FF00; --mid:#FF9A5C; --low:#FF5F1F;
+  --display:"Archivo","Arial Black",Arial,sans-serif;
+  --body:"Barlow",Arial,Helvetica,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+body{background:var(--black);color:var(--white);font-family:var(--body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--black)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.strap{background:var(--fluoro);color:var(--black)}
+.strap .wrap{padding-block:8px;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:.14em;text-align:center;text-transform:uppercase}
+header .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-block:24px 18px}
+.logo{font-family:var(--display);font-weight:900;font-size:clamp(28px,6vw,42px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase}
+.logo span{color:var(--orange)}
+.who{text-align:right;color:var(--grey);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.who b{display:block;color:var(--white);font-family:var(--display);font-size:20px;letter-spacing:0;text-transform:none;font-weight:800}
+.sample{display:inline-block;margin-top:6px;border:1px solid var(--fluoro);color:var(--fluoro);padding:2px 8px;border-radius:2px;font-size:10px;letter-spacing:.14em}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--black);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto}
+nav a{flex:none;color:var(--grey);text-decoration:none;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:14px 12px;border-bottom:3px solid transparent}
+nav a[aria-current="page"]{color:var(--white);border-bottom-color:var(--orange)}
+nav a:focus-visible,button:focus-visible{outline:2px solid var(--fluoro);outline-offset:2px}
+main .wrap{padding-block:24px 48px;display:grid;gap:20px}
+.kicker{font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
+.kicker.y{color:var(--fluoro)}
+h2{font-family:var(--display);font-weight:800;font-size:22px;margin:2px 0 0;text-wrap:balance}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px;min-width:0}
+/* Score hero */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;background:var(--panel-2);border-left:6px solid var(--band,var(--fluoro))}
+.big{font-family:var(--display);font-weight:900;font-size:clamp(64px,14vw,104px);line-height:.85;font-variant-numeric:tabular-nums}
+.big small{font-size:.22em;color:var(--grey);font-weight:700;margin-left:4px}
+.pill{display:inline-block;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:2px;background:var(--band);color:var(--black)}
+.meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:var(--grey)}
+.meta b{color:var(--white);font-variant-numeric:tabular-nums}
+.up{color:var(--fluoro)!important}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--grey)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:1px;margin-right:6px;vertical-align:-1px}
+/* Win / goal / tip */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.wgt{background:var(--panel);border-top:3px solid var(--orange);padding:18px;border-radius:0 0 4px 4px;min-width:0}
+.wgt:nth-child(2){border-top-color:var(--fluoro)}
+.wgt p{margin:8px 0 0;font-size:16px;font-weight:500}
+.wgt .why{font-size:13px;color:var(--grey);font-weight:400}
+/* Chart */
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--grey);font-family:var(--mono);font-size:11px}
+/* Four cards */
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px;min-width:0}
+.stat h3{margin:0;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+.stat .n{font-family:var(--display);font-weight:900;font-size:40px;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .n small{font-size:16px;color:var(--grey);font-weight:700}
+.stat .s{font-size:13px;color:var(--grey);margin-top:4px}
+.bar{height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden;margin-top:12px}
+.bar span{display:block;height:100%;background:var(--fluoro)}
+/* CLEAR */
+.pillars{display:grid;gap:12px}
+.pil{display:grid;grid-template-columns:52px 1fr 64px;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.pil.focus{border-color:var(--orange)}
+.pil .L{font-family:var(--display);font-weight:900;font-size:40px;color:var(--orange);line-height:1;text-align:center}
+.pil .name{font-family:var(--display);font-weight:800;font-size:17px}
+.pil .def{font-size:13px;color:var(--grey)}
+.pil .track{height:10px;background:var(--panel-2);border-radius:5px;margin-top:8px;position:relative;overflow:hidden}
+.pil .track span{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.pil .sc{font-family:var(--display);font-weight:900;font-size:26px;text-align:right;font-variant-numeric:tabular-nums}
+.pil .sc small{display:block;font-size:11px;color:var(--grey);font-weight:600;font-family:var(--body)}
+.tag{display:inline-block;margin-left:8px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--black);background:var(--orange);padding:2px 6px;border-radius:2px;vertical-align:2px;font-family:var(--display);font-weight:800}
+/* Progress table */
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-variant-numeric:tabular-nums}
+th,td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--line);font-size:14px}
+th{font-family:var(--display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+td:first-child,th:first-child{text-align:left}
+td.c{font-weight:600;border-radius:2px}
+/* Log */
+.log{display:grid;gap:14px}
+.entry{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:4px;padding:18px}
+.entry:nth-child(even){border-left-color:var(--fluoro)}
+.entry .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.entry h3{margin:0;font-family:var(--display);font-weight:800;font-size:17px}
+.entry dl{display:grid;grid-template-columns:110px 1fr;gap:6px 14px;margin:12px 0 0}
+.entry dt{color:var(--grey);font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-top:2px}
+.entry dd{margin:0}
+.grat{font-size:16px;font-weight:500;margin-top:10px;line-height:1.4}
+.miles{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:12px;color:var(--grey)}
+.miles li{display:flex;gap:8px;align-items:center}
+.miles li::before{content:"";flex:none;width:10px;height:10px;border:1.5px solid var(--grey);border-radius:2px}
+.miles li.done{color:var(--white)}
+.miles li.done::before{background:var(--fluoro);border-color:var(--fluoro)}
+.keys{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:12px;color:var(--grey)}
+.keys i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:3px;border-radius:2px}
+footer .wrap{padding-block:20px 32px;color:var(--grey);font-size:12px;border-top:1px solid var(--line)}
+@media (max-width:820px){.four{grid-template-columns:repeat(2,1fr)}.three{grid-template-columns:1fr}}
+@media (max-width:480px){.hero{grid-template-columns:1fr}.four{grid-template-columns:1fr 1fr}.stat .n{font-size:32px}.entry dl{grid-template-columns:1fr}.pil{grid-template-columns:40px 1fr 52px}}
+@media (prefers-reduced-motion:no-preference){.bar span,.pil .track span{transition:width .6s ease}}
+.dist{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:12px;background:var(--panel-2)}
+.dist span{display:block;height:100%}
+.rec{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;background:var(--panel-2);border:3px solid var(--fluoro);border-radius:4px;padding:22px}
+.rec h2{font-size:clamp(24px,4vw,32px)}
+.rec .why{color:var(--grey);margin:6px 0 0;max-width:62ch}
+.rec .alt{font-size:13px;color:var(--grey);margin-top:10px}
+.rec .alt b{color:var(--white)}
+.big2{font-family:var(--display);font-weight:900;font-size:56px;line-height:1;color:var(--orange);text-align:center}
+.big2 small{display:block;font-size:11px;letter-spacing:.14em;color:var(--grey);font-weight:700;text-transform:uppercase;margin-top:6px}
+.oc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.oc .stat{border-top:4px solid var(--orange);border-radius:0 0 4px 4px}
+.oc .stat:nth-child(2){border-top-color:var(--fluoro)}
+.oc .stat:nth-child(3){border-top-color:var(--white)}
+.oc .verb{font-family:var(--display);font-weight:900;font-size:26px;text-transform:uppercase;letter-spacing:-.01em}
+.sig{display:grid;gap:10px;margin-top:14px}
+.sig div{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:10px;font-size:14px}
+.sig b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{font-size:12px;color:var(--grey);border:1px dashed var(--line);border-radius:4px;padding:12px 14px}
+.ws{display:grid;gap:14px}
+.wrun{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:4px;padding:18px}
+.wrun:nth-child(even){border-left-color:var(--fluoro)}
+.wrun h3{margin:4px 0 0;font-family:var(--display);font-weight:800;font-size:19px}
+.wrun p{margin:6px 0 0;color:var(--grey);font-size:14px}
+.move{text-align:right;font-family:var(--display);font-weight:900;font-variant-numeric:tabular-nums}
+.move .n{font-size:30px;color:var(--fluoro)}
+.move .n.neg{color:var(--orange)}
+.move small{display:block;font-size:11px;color:var(--grey);font-family:var(--body);font-weight:600}
+@media (max-width:820px){.oc{grid-template-columns:1fr}}
+@media (max-width:480px){.rec,.wrun{grid-template-columns:1fr}.move{text-align:left}}
+</style>
+</head>
+<body>
+
+<div class="strap"><div class="wrap">Your team. Your data. No names.</div></div>
+
+<header><div class="wrap">
+  <div class="logo">Not Today<br>Derek<span>.</span></div>
+  <div class="who">Leadership dashboard<b>Sales team · 8 staff</b>Fortnight ending 27 Oct<br><span class="sample">Example data</span></div>
+</div></header>
+
+<nav aria-label="Dashboard sections"><div class="wrap">
+  <a href="#overview">Overview</a>
+  <a href="#trends">Trends</a>
+  <a href="#outcomes">Outcomes</a>
+  <a href="#workshops">Workshop history</a>
+</div></nav>
+
+<main>
+  <section data-view="overview"><div class="wrap">
+    <div class="panel hero" id="hero">
+      <div class="big"><span id="score">—</span><small>/100</small></div>
+      <div>
+        <div class="kicker y">Team average this week</div>
+        <div style="margin-top:8px"><span class="pill" id="band">—</span></div>
+        <div class="meta"><span><b id="delta" class="up">—</b> on last week</span><span>Started at <b id="start">—</b></span><span>Team of <b>8</b></span></div>
+        <div class="dist" id="dist" aria-label="How the team is spread across the three bands"></div>
+        <div class="legend" id="distKey"></div>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div>
+        <div class="kicker y">Recommended workshop · next fortnight</div>
+        <h2 id="recTitle">—</h2>
+        <p class="why" id="recWhy">—</p>
+        <div class="alt" id="recAlt"></div>
+      </div>
+      <div class="big2"><span id="recLetter">—</span><small id="recPillar">—</small></div>
+    </div>
+
+    <div>
+      <div class="kicker">The DEREK. Framework</div><h2>CLEAR, team averages</h2>
+      <p style="color:var(--grey);margin:6px 0 0">Averaged across everyone's one-on-ones. The lowest pillar sets the next workshop.</p>
+    </div>
+    <div class="pillars" id="pillars"></div>
+  </div></section>
+
+  <section data-view="trends" hidden><div class="wrap">
+    <div><div class="kicker">Trends</div><h2>Where the team is heading</h2><p style="color:var(--grey);margin:6px 0 0">Team averages, week by week. Dots mark the weeks a workshop ran.</p></div>
+    <div class="panel chart"><div class="kicker">Tracker</div><h2>Team score, week by week</h2><div id="schart" style="margin-top:12px"></div></div>
+    <div class="panel chart"><div class="kicker">Tracker</div><h2>Each pillar, week by week</h2><div class="keys" id="pkeys"></div><div id="pchart" style="margin-top:12px"></div></div>
+  </div></section>
+
+  <section data-view="outcomes" hidden><div class="wrap">
+    <div><div class="kicker">The outcome</div><h2>People stay. People show up. People perform.</h2><p style="color:var(--grey);margin:6px 0 0">Team-level signals only. No one is named, and nothing is shown for a group smaller than five.</p></div>
+    <div class="oc">
+      <div class="stat"><div class="kicker">Retention</div><div class="verb">Stay</div>
+        <div class="n">7.3<small> /10</small></div><div class="s">Enjoying work, up from 5.8 at the start</div>
+        <div class="sig"><div><span>Team morale</span><b>7.1 / 10</b></div><div><span>Comfortable in the environment</span><b>7.6 / 10</b></div></div></div>
+      <div class="stat"><div class="kicker y">Absenteeism</div><div class="verb">Show up</div>
+        <div class="n">7.0<small> /10</small></div><div class="s">Energy people are showing up with, up from 5.6 at the start</div>
+        <div class="sig"><div><span>Sleep and recovery</span><b>6.4 / 10</b></div><div><span>Stress in check</span><b>6.1 / 10</b></div></div></div>
+      <div class="stat"><div class="kicker" style="color:var(--white)">Presenteeism</div><div class="verb">Perform</div>
+        <div class="n">7.2<small> /10</small></div><div class="s">Focus, how locked in people are during the day, up from 5.9</div>
+        <div class="sig"><div><span>Confidence, backing themselves</span><b>7.4 / 10</b></div><div><span>Change since start</span><b class="up">+1.3</b></div></div></div>
+    </div>
+    <div class="note">All scores come from one-on-one conversations, never surveys. Stress is scored so that higher means more in control. Unplanned leave and turnover come from your own HR records, and we compare them with these scores each quarter to show the shift.</div>
+  </div></section>
+
+  <section data-view="workshops" hidden><div class="wrap">
+    <div><div class="kicker">Workshop history</div><h2>What we ran, and what moved</h2><p style="color:var(--grey);margin:6px 0 0">Each workshop was chosen from the data. The change compares the pillar's team average the week before with two weeks after.</p></div>
+    <div class="ws" id="ws"></div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">© 2026 Not Today Derek · The DEREK. Framework · Anonymous team data. Individual scores are never shared with leadership.</div></footer>
+
+<script>
+const PILLARS=[
+  {k:"C",name:"Connection",def:"Relationships, communication and real presence."},
+  {k:"L",name:"Lifestyle",def:"Health, movement, sleep and recovery."},
+  {k:"E",name:"Exploration",def:"Growth, challenge and stepping outside the comfort zone."},
+  {k:"A",name:"Attitude",def:"Mindset, resilience, purpose and belief."},
+  {k:"R",name:"Routine",def:"Habits, goals and priorities."}
+];
+// Example data: team CLEAR averages per week (out of 10)
+const WEEKS=[
+  [5.8,5.1,6.0,5.6,5.2],[5.9,5.0,6.1,5.8,5.3],[6.4,5.4,6.2,6.1,5.4],[6.6,5.9,6.3,6.4,5.6],
+  [6.7,6.2,6.4,6.8,5.5],[6.9,6.4,6.6,7.2,5.7],[7.0,6.3,6.6,7.3,5.8],[7.2,6.6,6.8,7.5,5.9]
+];
+const BANDS={firing:3,mid:4,low:1}; // people per band this week
+const WORKSHOP={
+  C:["Check In: Leading at Work and at Home","Presence over Presents"],
+  L:["Switch Off to Switch On",null],
+  E:["Fail Forward",null],
+  A:["Setback to Comeback","Back Yourself"],
+  R:["If Nothing Changes, Nothing Changes",null]
+};
+const RUNS=[
+  {wk:1,title:"Not Today, Derek.",pillar:"All five",before:56,after:61,unit:"/100",note:"Foundation session. Everyone named their Derek and set their standards."},
+  {wk:3,title:"Check In: Leading at Work and at Home",pillar:"Connection",before:5.9,after:6.6,unit:"/10",note:"Lowest pillar in week 2. Five-minute call challenge set."},
+  {wk:5,title:"Setback to Comeback",pillar:"Attitude",before:6.4,after:7.2,unit:"/10",note:"Run after a tough sales month. Each person built a three-step reset."},
+  {wk:7,title:"Switch Off to Switch On",pillar:"Lifestyle",before:6.2,after:6.6,unit:"/10",note:"After-hours contact norms agreed as a team."}
+];
+const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+const score=w=>Math.round(w.reduce((a,b)=>a+b,0)*2);
+const bandOf=s=>s>=75?["Firing","var(--good)"]:s>=50?["Mid range","var(--mid)"]:["Needs attention","var(--low)"];
+const scores=WEEKS.map(score), now=scores.at(-1), prev=scores.at(-2);
+const [bName,bCol]=bandOf(now);
+document.getElementById("score").textContent=now;
+document.getElementById("band").textContent=bName;
+document.getElementById("hero").style.setProperty("--band",bCol);
+document.getElementById("band").style.setProperty("--band",bCol);
+const d=now-prev, del=document.getElementById("delta");
+del.textContent=(d>0?"+":"")+d; if(d<0) del.classList.remove("up");
+document.getElementById("start").textContent=scores[0];
+const tot=BANDS.firing+BANDS.mid+BANDS.low;
+document.getElementById("dist").innerHTML=[["firing","var(--good)"],["mid","var(--mid)"],["low","var(--low)"]].map(([k,c])=>`<span style="width:${BANDS[k]/tot*100}%;background:${c}"></span>`).join("");
+document.getElementById("distKey").innerHTML=`<span><i style="background:var(--good)"></i>Firing ${BANDS.firing}</span><span><i style="background:var(--mid)"></i>Mid range ${BANDS.mid}</span><span><i style="background:var(--low)"></i>Needs attention ${BANDS.low}</span>`;
+
+// Pillars + recommendation
+(function(){
+  const cur=WEEKS.at(-1), last=WEEKS.at(-2), min=Math.min(...cur), mi=cur.indexOf(min), p=PILLARS[mi];
+  document.getElementById("pillars").innerHTML=PILLARS.map((q,i)=>{
+    const v=cur[i], dv=+(v-last[i]).toFixed(1), focus=i===mi;
+    const col=v>=7.5?"var(--good)":v>=5?"var(--mid)":"var(--low)";
+    return `<div class="pil${focus?' focus':''}"><div class="L">${q.k}</div>
+      <div style="min-width:0"><div class="name">${q.name}${focus?'<span class="tag">Lowest</span>':''}</div><div class="def">${q.def}</div>
+      <div class="track"><span style="width:${v*10}%;background:${col}"></span></div></div>
+      <div class="sc">${v.toFixed(1)}<small>${dv>0?'+'+dv:dv===0?'no change':dv} on last wk</small></div></div>`}).join("");
+  const [w,alt]=WORKSHOP[p.k];
+  document.getElementById("recTitle").textContent=w;
+  document.getElementById("recLetter").textContent=p.k;
+  document.getElementById("recPillar").textContent=p.name;
+  document.getElementById("recWhy").textContent=`${p.name} is the team's lowest pillar at ${min.toFixed(1)} out of 10, and it has only moved ${(min-WEEKS[0][mi]).toFixed(1)} since the start. This workshop targets it directly.`;
+  if(alt) document.getElementById("recAlt").innerHTML=`Also fits: <b>${alt}</b>`;
+})();
+
+// Line chart helper
+function lineChart(el,series,max,ticks,label,marks){
+  const W=720,H=260,p={l:36,r:96,t:16,b:32},iw=W-p.l-p.r,ih=H-p.t-p.b,n=WEEKS.length;
+  const x=i=>p.l+i*iw/(n-1), y=v=>p.t+ih-(v/max)*ih;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label}">`;
+  ticks.forEach(v=>s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y(v)}" y2="${y(v)}" stroke="#2A2A2A"/><text x="${p.l-8}" y="${y(v)+4}" text-anchor="end">${v}</text>`);
+  for(let i=0;i<n;i++) s+=`<text x="${x(i)}" y="${H-10}" text-anchor="middle">Wk ${i+1}</text>`;
+  (marks||[]).forEach(m=>s+=`<line x1="${x(m-1)}" x2="${x(m-1)}" y1="${p.t}" y2="${y(0)}" stroke="#E6FF00" stroke-dasharray="3 4" opacity=".45"/>`);
+  const ends=series.map((sr,k)=>({k,y:y(sr.v.at(-1))})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<14) ends[i].y=ends[i-1].y+14;
+  series.forEach((sr,k)=>{
+    const dd=sr.v.map((v,i)=>`${i?'L':'M'}${x(i)},${y(v)}`).join(" ");
+    if(sr.area) s+=`<path d="${dd} L${x(n-1)},${y(0)} L${x(0)},${y(0)} Z" fill="${sr.c}" opacity=".12"/>`;
+    s+=`<path d="${dd}" fill="none" stroke="${sr.c}" stroke-width="${sr.w||2.5}" stroke-linejoin="round" stroke-linecap="round"${sr.dash?` stroke-dasharray="${sr.dash}"`:''}/>`;
+    if(sr.area)(marks||[]).forEach(m=>s+=`<circle cx="${x(m-1)}" cy="${y(sr.v[m-1])}" r="5" fill="#E6FF00"/>`);
+    s+=`<circle cx="${x(n-1)}" cy="${y(sr.v.at(-1))}" r="4.5" fill="${sr.c}"/>`;
+    s+=`<text x="${x(n-1)+10}" y="${ends.find(e=>e.k===k).y+4}" style="fill:${sr.c};font-weight:600">${sr.name} ${sr.fmt?sr.fmt(sr.v.at(-1)):sr.v.at(-1)}</text>`;
+  });
+  el.innerHTML=s+"</svg>";
+}
+const PCOL=["#FF5F1F","#E6FF00","#FFFFFF","#FF9A5C","#9A9A9A"], PDASH=["","","6 4","","2 4"];
+const marks=RUNS.map(r=>r.wk);
+lineChart(document.getElementById("schart"),[{name:"Team",c:"#FF5F1F",area:true,w:3,v:scores}],100,[0,25,50,75,100],`Team score from ${scores[0]} to ${now}`,marks);
+lineChart(document.getElementById("pchart"),PILLARS.map((p,i)=>({name:p.k,c:PCOL[i],dash:PDASH[i],v:WEEKS.map(w=>w[i]),fmt:v=>v.toFixed(1)})),10,[0,2,4,6,8,10],"Team CLEAR averages across eight weeks",marks);
+document.getElementById("pkeys").innerHTML=PILLARS.map((p,i)=>`<span><i style="background:${PCOL[i]}"></i>${p.k} · ${p.name}</span>`).join("");
+
+// Workshop history
+document.getElementById("ws").innerHTML=RUNS.slice().reverse().map(r=>{const ch=+(r.after-r.before).toFixed(1);
+  return `<article class="wrun"><div><div class="kicker y">Week ${r.wk} · ${r.pillar}</div><h3>${r.title}</h3><p>${r.note}</p></div>
+  <div class="move"><div class="n${ch<0?' neg':''}">${ch>0?'+':''}${ch}</div><small>${r.before} → ${r.after} ${r.unit}</small></div></article>`}).join("");
+
+// Hash routing
+const VIEWS=["overview","trends","outcomes","workshops"];
+function route(){const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"overview";
+  document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.dataset.view!==v);
+  document.querySelectorAll("nav a").forEach(a=>{if(a.getAttribute("href")==="#"+v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+}
+addEventListener("hashchange",route); route();
+</script>
+</body>
+</html>
